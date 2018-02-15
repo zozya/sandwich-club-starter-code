@@ -4,16 +4,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.sandwichclub.model.Sandwich;
 import com.udacity.sandwichclub.utils.JsonUtils;
 
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private TextView m_also_known_tv;
+    private TextView m_origin_tv;
+    private TextView m_description_tv;
+    private TextView m_ingredients_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,28 @@ public class DetailActivity extends AppCompatActivity {
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
+
+        StringBuffer sb1 = new StringBuffer();
+        List<String> also_known_list = sandwich.getAlsoKnownAs();
+        for(String str: also_known_list) {
+            if(str == also_known_list.get(also_known_list.size() - 1))
+                sb1.append(str);
+            else
+                sb1.append(str + "\n");
+        }
+        m_also_known_tv.setText(sb1.toString());
+        m_origin_tv.setText(sandwich.getPlaceOfOrigin());
+        m_description_tv.setText(sandwich.getDescription());
+
+        StringBuffer sb2 = new StringBuffer();
+        List<String> ingredients_list = sandwich.getIngredients();
+        for(String str: ingredients_list) {
+            if(str == ingredients_list.get(ingredients_list.size() - 1))
+                sb2.append(str);
+            else
+                sb2.append(str + "\n");
+        }
+        m_ingredients_tv.setText(sb2.toString());
     }
 
     private void closeOnError() {
@@ -58,5 +87,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI() {
 
+        m_also_known_tv = findViewById(R.id.also_known_tv);
+        m_origin_tv = findViewById(R.id.origin_tv);
+        m_description_tv = findViewById(R.id.description_tv);
+        m_ingredients_tv = findViewById(R.id.ingredients_tv);
     }
 }
